@@ -11,52 +11,54 @@ import { useQuery } from 'react-query'
 import MovieCard from './components/MovieCard'
 import MovieCardSkeletons from './components/MovieCardSkeletons'
 import { MdClear } from 'react-icons/md'
-import popularMovies from '../data/popularMovies'
-import configuration from '../data/configuration'
 import SideWindow from './components/SideWindow'
 
 function App() {
+  const [inputSearch, setInputSearch] = useState('')
   const [search, setSearch] = useState('')
   const [sideWindowIsOpen, setSideWindowIsOpen] = useState(false)
   const [movieDetails, setMovieDetails] = useState(null)
+  const [movies, setMovies] = useState([])
 
-  const {
-    data: movies,
-    isLoading: isLoadingMovies,
-    isError: isErrorMovies,
-    isSuccess: isSuccessMovies,
-  } = useQuery('movies', api.getPopularMovies, {
-    initialData: popularMovies,
+  const moviesQuery = useQuery('movies', api.getPopularMovies, {
+    onSuccess: (movies) => {
+      setMovies(movies)
+    },
+    enabled: !search,
   })
 
-  const {
-    data: searchedMovies,
-    isLoading: isLoadingSearchedMovies,
-    isError: isErrorSearchedMovies,
-    isSuccess: isSuccessSearchedMovies,
-  } = useQuery(['searchedMovies', search], () => api.getMoviesByTerm(search), {
-    enabled: Boolean(search),
-  })
+  const searchedMoviesQuery = useQuery(
+    ['searchedMovies', search],
+    () => api.getMoviesByTerm(search),
+    {
+      onSuccess: (movies) => {
+        setMovies(movies)
+      },
+      enabled: Boolean(search),
+    }
+  )
 
-  const {
-    data: config,
-    isSuccess: isSuccessConfig,
-    isError: isErrorConfig,
-    isLoading: isLoadingConfiguration,
-  } = useQuery('configuration', api.getConfiguration, {
-    initialData: configuration,
+  const configQuery = useQuery('configuration', api.getConfiguration, {
     cacheTime: 60 * 60 * 24 * 2, // days
   })
 
-  const handleOnKeyDown = (event) => {
-    // Need to change to work with enter key press
-    // Add a blur action on esc key press
+  const handleOnInputChange = (event) => {
     const { target } = event
     const inputVal = target.value
-    setSearch(inputVal)
+    setInputSearch(inputVal)
+  }
+
+  const handleOnInputEnter = (event) => {
+    const {
+      target: { value: inputVal },
+      keyCode,
+    } = event
+    const isEnterKey = keyCode === 13
+    if (isEnterKey) setSearch(inputVal)
   }
 
   const handleOnClear = () => {
+    setInputSearch('')
     setSearch('')
   }
 
@@ -75,39 +77,33 @@ function App() {
         <InputGroup>
           <Input
             placeholder='Search movie titles'
-            onKeyDown={handleOnKeyDown}
-            value={search}
+            onChange={handleOnInputChange}
+            onKeyUp={handleOnInputEnter}
+            value={inputSearch}
           />
           <InputRightElement children={<MdClear onClick={handleOnClear} />} />
         </InputGroup>
-        {!search &&
-          isSuccessMovies &&
-          movies.results.map((movie) => (
-            <MovieCard
-              key={`movie-${movie.id}`}
-              {...movie}
-              config={config}
-              handleOnCardClick={() => handleOnCardClick(movie)}
-            />
-          ))}
-        {search && isSuccessSearchedMovies ? (
-          searchedMovies.results.map((movie) => (
-            <MovieCard
-              key={`movie-${movie.id}`}
-              {...movie}
-              config={config}
-              handleOnCardClick={() => handleOnCardClick(movie)}
-            />
-          ))
-        ) : (
+        {(moviesQuery.isLoading || searchedMoviesQuery.isLoading) && (
           <MovieCardSkeletons noOfSkeletons={6}></MovieCardSkeletons>
         )}
+        {(moviesQuery.isError || searchedMoviesQuery.isError) && (
+          <div>There was an error when trying to fetch the movies.</div>
+        )}
+        {movies.map((movie) => (
+          <MovieCard
+            key={`movie-${movie.id}`}
+            {...movie}
+            config={configQuery.data}
+            handleOnCardClick={() => handleOnCardClick(movie)}
+          />
+        ))}
       </Container>
       {movieDetails && (
         <SideWindow
           isOpen={sideWindowIsOpen}
           handleOnClose={() => handleOnSideWindowOpen(false)}
           movie={movieDetails}
+          config={configQuery.data}
         />
       )}
     </div>
