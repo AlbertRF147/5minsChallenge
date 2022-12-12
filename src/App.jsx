@@ -1,5 +1,5 @@
 import './App.css'
-import { Container, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { Center, Container, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
 import { useState } from 'react'
 import api from './api'
 import { useQuery } from 'react-query'
@@ -13,7 +13,7 @@ function App() {
   const [search, setSearch] = useState('')
   const [detailsWindowIsOpen, setDetailsWindowIsOpen] = useState(false)
   const [movieDetails, setMovieDetails] = useState(null)
-  const [movies, setMovies] = useState([])
+  const [movies, setMovies] = useState(null)
 
   const moviesQuery = useQuery('movies', api.getPopularMovies, {
     onSuccess: (movies) => {
@@ -79,11 +79,12 @@ function App() {
         {(moviesQuery.isLoading || searchedMoviesQuery.isLoading) && (
           <MovieCardSkeletons noOfSkeletons={6}></MovieCardSkeletons>
         )}
-        {(!movies.length || moviesQuery.isError || searchedMoviesQuery.isError) && (
-          <div>There was an error when trying to fetch the movies.</div>
+        {(!movies || moviesQuery.isError || searchedMoviesQuery.isError) && (
+          <Center minH="400px" centerContent alignContent>
+            <Text>There was an error when trying to fetch the movies.</Text>
+          </Center>
         )}
         {movies &&
-          movies.length &&
           movies.map((movie) => (
             <MovieCard
               key={`movie-${movie.id}`}
