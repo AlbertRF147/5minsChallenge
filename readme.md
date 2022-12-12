@@ -22,3 +22,10 @@ Here are some pending tasks that would be immediately addressed if more time was
 - Add movie features. E.g. Movie ratings, reviews, etc.
 - Write component tests.
 - Improve the network calls performance with React Query. For example, handle the not found fallback images via React Query to allow for caching too.
+
+### Run the App
+
+1. Clone the repo with `https://github.com/AlbertRF147/5minsChallenge.git`
+2. Run `npm install`
+3. Run `npm run dev`
+4. A new browser tab should open with the running app. If not, you can manually open it by navigating to: http://127.0.0.1:5173
