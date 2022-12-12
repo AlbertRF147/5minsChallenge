@@ -76,7 +76,7 @@ function App() {
           <MovieCardSkeletons noOfSkeletons={6}></MovieCardSkeletons>
         )}
         {(!movies || moviesQuery.isError || searchedMoviesQuery.isError) && (
-          <Center minH="400px" centerContent alignContent>
+          <Center minH="400px">
             <Text>There was an error when trying to fetch the movies.</Text>
           </Center>
         )}
