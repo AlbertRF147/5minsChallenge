@@ -21,4 +21,4 @@ Here are some pending tasks that would be immediately addressed if more time was
 - Improve the overall appearance, specifically in the details window.
 - Add movie features. E.g. Movie ratings, reviews, etc.
 - Write component tests.
-- Improve the network calls performance with React Query.
+- Improve the network calls performance with React Query. For example, handle the not found fallback images via React Query to allow for caching too.
