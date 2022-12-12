@@ -79,7 +79,7 @@ function App() {
         {(moviesQuery.isLoading || searchedMoviesQuery.isLoading) && (
           <MovieCardSkeletons noOfSkeletons={6}></MovieCardSkeletons>
         )}
-        {(moviesQuery.isError || searchedMoviesQuery.isError) && (
+        {(!movies.length || moviesQuery.isError || searchedMoviesQuery.isError) && (
           <div>There was an error when trying to fetch the movies.</div>
         )}
         {movies &&
