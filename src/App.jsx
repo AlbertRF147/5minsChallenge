@@ -1,22 +1,17 @@
 import './App.css'
-import {
-  Container,
-  Input,
-  InputGroup,
-  InputRightElement,
-} from '@chakra-ui/react'
+import { Container, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import { useState } from 'react'
 import api from './api'
 import { useQuery } from 'react-query'
 import MovieCard from './components/MovieCard'
 import MovieCardSkeletons from './components/MovieCardSkeletons'
 import { MdClear } from 'react-icons/md'
-import SideWindow from './components/SideWindow'
+import DetailsWindow from './components/DetailsWindow'
 
 function App() {
   const [inputSearch, setInputSearch] = useState('')
   const [search, setSearch] = useState('')
-  const [sideWindowIsOpen, setSideWindowIsOpen] = useState(false)
+  const [detailsWindowIsOpen, setDetailsWindowIsOpen] = useState(false)
   const [movieDetails, setMovieDetails] = useState(null)
   const [movies, setMovies] = useState([])
 
@@ -24,7 +19,7 @@ function App() {
     onSuccess: (movies) => {
       setMovies(movies)
     },
-    enabled: !search,
+    enabled: !search
   })
 
   const searchedMoviesQuery = useQuery(
@@ -34,13 +29,11 @@ function App() {
       onSuccess: (movies) => {
         setMovies(movies)
       },
-      enabled: Boolean(search),
+      enabled: Boolean(search)
     }
   )
 
-  const configQuery = useQuery('configuration', api.getConfiguration, {
-    cacheTime: 60 * 60 * 24 * 2, // days
-  })
+  const configQuery = useQuery('configuration', api.getConfiguration)
 
   const handleOnInputChange = (event) => {
     const { target } = event
@@ -51,7 +44,7 @@ function App() {
   const handleOnInputEnter = (event) => {
     const {
       target: { value: inputVal },
-      keyCode,
+      keyCode
     } = event
     const isEnterKey = keyCode === 13
     if (isEnterKey) setSearch(inputVal)
@@ -64,19 +57,19 @@ function App() {
 
   const handleOnCardClick = (movie) => {
     setMovieDetails(movie)
-    handleOnSideWindowOpen(true)
+    handleOnDetailsWindowOpen(true)
   }
 
-  const handleOnSideWindowOpen = (isOpen) => {
-    setSideWindowIsOpen(isOpen)
+  const handleOnDetailsWindowOpen = (isOpen) => {
+    setDetailsWindowIsOpen(isOpen)
   }
 
   return (
-    <div className='App'>
-      <Container maxW='800px' minH='100vh'>
+    <div className="App">
+      <Container maxW="800px" minH="100vh">
         <InputGroup>
           <Input
-            placeholder='Search movie titles'
+            placeholder="Search movie titles"
             onChange={handleOnInputChange}
             onKeyUp={handleOnInputEnter}
             value={inputSearch}
@@ -99,9 +92,9 @@ function App() {
         ))}
       </Container>
       {movieDetails && (
-        <SideWindow
-          isOpen={sideWindowIsOpen}
-          handleOnClose={() => handleOnSideWindowOpen(false)}
+        <DetailsWindow
+          isOpen={detailsWindowIsOpen}
+          handleOnClose={() => handleOnDetailsWindowOpen(false)}
           movie={movieDetails}
           config={configQuery.data}
         />
