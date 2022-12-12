@@ -29,3 +29,5 @@ Here are some pending tasks that would be immediately addressed if more time was
 2. Run `npm install`
 3. Run `npm run dev`
 4. A new browser tab should open with the running app. If not, you can manually open it by navigating to: http://127.0.0.1:5173
+
+_NOTE: You will need to add a `.env` file with the `VITE_API_KEY` variable with your `themoviedb.org` API key. I will be providing my key via email in case you don't have one._
