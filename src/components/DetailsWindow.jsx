@@ -21,8 +21,8 @@ function DetailsWindow({ isOpen, handleOnClose, movie, config = {} }) {
     })
 
     const posterImage = useBreakpointValue({
-      base: `${images.base_url}${images.poster_sizes[2]}${posterPath}`,
-      md: `${images.base_url}${images.poster_sizes[3]}${posterPath}`
+      base: `${images?.base_url}${images?.poster_sizes[2]}${posterPath}`,
+      md: `${images?.base_url}${images?.poster_sizes[3]}${posterPath}`
     })
 
     return images ? (
@@ -60,12 +60,12 @@ function DetailsWindow({ isOpen, handleOnClose, movie, config = {} }) {
       <Container minH="100%" padding={{ base: '20px 0', md: '40px 0' }}>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing="40px">
           <Box>
-            <DetailsImage {...config} posterPath={movie.poster_path} m="auto" />
+            <DetailsImage {...config} posterPath={movie?.poster_path} m="auto" />
           </Box>
           <Box>
-            <Heading size={{ base: 'md', md: 'lg' }}>{movie.title}</Heading>
+            <Heading size={{ base: 'md', md: 'lg' }}>{movie?.title}</Heading>
             <Text py={4} textAlign="left">
-              {movie.overview}
+              {movie?.overview}
             </Text>
           </Box>
         </SimpleGrid>

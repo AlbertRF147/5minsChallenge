@@ -1,7 +1,7 @@
 import './App.css'
 import { Center, Container, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
 import { useState } from 'react'
-import api from './api'
+import { getMoviesByTerm, getPopularMovies, getConfiguration } from './api'
 import { useQuery } from 'react-query'
 import MovieCard from './components/MovieCard'
 import MovieCardSkeletons from './components/MovieCardSkeletons'
@@ -15,25 +15,21 @@ function App() {
   const [movieDetails, setMovieDetails] = useState(null)
   const [movies, setMovies] = useState(null)
 
-  const moviesQuery = useQuery('movies', api.getPopularMovies, {
+  const moviesQuery = useQuery('movies', getPopularMovies, {
     onSuccess: (movies) => {
       setMovies(movies)
     },
     enabled: !search
   })
 
-  const searchedMoviesQuery = useQuery(
-    ['searchedMovies', search],
-    () => api.getMoviesByTerm(search),
-    {
-      onSuccess: (movies) => {
-        setMovies(movies)
-      },
-      enabled: Boolean(search)
-    }
-  )
+  const searchedMoviesQuery = useQuery(['searchedMovies', search], () => getMoviesByTerm(search), {
+    onSuccess: (movies) => {
+      setMovies(movies)
+    },
+    enabled: Boolean(search)
+  })
 
-  const configQuery = useQuery('configuration', api.getConfiguration)
+  const configQuery = useQuery('configuration', getConfiguration)
 
   const handleOnInputChange = (event) => {
     const { target } = event
