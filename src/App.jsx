@@ -82,14 +82,15 @@ function App() {
         {(moviesQuery.isError || searchedMoviesQuery.isError) && (
           <div>There was an error when trying to fetch the movies.</div>
         )}
-        {movies.map((movie) => (
-          <MovieCard
-            key={`movie-${movie.id}`}
-            {...movie}
-            config={configQuery.data}
-            handleOnCardClick={() => handleOnCardClick(movie)}
-          />
-        ))}
+        {movies.length &&
+          movies.map((movie) => (
+            <MovieCard
+              key={`movie-${movie.id}`}
+              {...movie}
+              config={configQuery.data}
+              handleOnCardClick={() => handleOnCardClick(movie)}
+            />
+          ))}
       </Container>
       {movieDetails && (
         <DetailsWindow
