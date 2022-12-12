@@ -82,7 +82,8 @@ function App() {
         {(moviesQuery.isError || searchedMoviesQuery.isError) && (
           <div>There was an error when trying to fetch the movies.</div>
         )}
-        {movies.length &&
+        {movies &&
+          movies.length &&
           movies.map((movie) => (
             <MovieCard
               key={`movie-${movie.id}`}
