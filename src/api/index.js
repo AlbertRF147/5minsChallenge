@@ -7,7 +7,7 @@ const getData = async (url) => {
     const data = await res.json()
     return data
   } catch (error) {
-    throw new Error('Error fetching movies by term')
+    throw new Error('Error fetching')
   }
 }
 

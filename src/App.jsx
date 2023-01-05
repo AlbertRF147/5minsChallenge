@@ -60,6 +60,9 @@ function App() {
     setDetailsWindowIsOpen(isOpen)
   }
 
+  const moviesLoading = moviesQuery.isLoading || searchedMoviesQuery.isLoading
+  const moviesErrored = moviesQuery.isError || searchedMoviesQuery.isError
+
   return (
     <div className="App">
       <Container maxW="800px" minH="100vh">
@@ -72,14 +75,18 @@ function App() {
           />
           <InputRightElement children={<MdClear onClick={handleOnClear} />} />
         </InputGroup>
-        {(moviesQuery.isLoading || searchedMoviesQuery.isLoading) && (
-          <MovieCardSkeletons noOfSkeletons={6}></MovieCardSkeletons>
-        )}
-        {(!movies || moviesQuery.isError || searchedMoviesQuery.isError) && (
+
+        {/* Movie card skeletons */}
+        {moviesLoading && <MovieCardSkeletons noOfSkeletons={6}></MovieCardSkeletons>}
+
+        {/* No movies */}
+        {(!movies || !movies.length || moviesErrored) && (
           <Center minH="400px">
             <Text>There was an error when trying to fetch the movies.</Text>
           </Center>
         )}
+
+        {/* Movie cards */}
         {movies &&
           movies.map((movie) => (
             <MovieCard
@@ -90,6 +97,8 @@ function App() {
             />
           ))}
       </Container>
+
+      {/* Movie card details modal */}
       {movieDetails && (
         <DetailsWindow
           isOpen={detailsWindowIsOpen}

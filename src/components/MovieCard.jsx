@@ -12,16 +12,7 @@ const CardImage = ({ images, posterPath, title }) => {
     md: `${images?.base_url}${images?.poster_sizes[1]}${posterPath}`
   })
 
-  return images ? (
-    <Image objectFit="cover" src={image} alt={title} fallbackSrc={fallbackImage} />
-  ) : (
-    <Image
-      objectFit="cover"
-      src={fallbackImage}
-      alt="Image not found"
-      sizes="(max-width: 400px) 92px, 154px"
-    />
-  )
+  return <Image objectFit="cover" src={image} alt={title} fallbackSrc={fallbackImage} />
 }
 
 function MovieCard(props) {

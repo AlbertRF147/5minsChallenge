@@ -17,7 +17,7 @@ function DetailsWindow({ isOpen, handleOnClose, movie, config = {} }) {
     const { images, posterPath, title } = props
     const fallbackImage = useBreakpointValue({
       base: 'https://via.placeholder.com/185?text=Not+found',
-      md: 'https://via.placeholder.com/342?text=Not+found'
+      md: 'https://via.placeholder.com/282x423?text=Not+found'
     })
 
     const posterImage = useBreakpointValue({
@@ -25,20 +25,12 @@ function DetailsWindow({ isOpen, handleOnClose, movie, config = {} }) {
       md: `${images?.base_url}${images?.poster_sizes[3]}${posterPath}`
     })
 
-    return images ? (
+    return (
       <Image
         objectFit="cover"
         src={posterImage}
         alt={title}
         fallbackSrc={fallbackImage}
-        {...props}
-      />
-    ) : (
-      <Image
-        objectFit="cover"
-        src={fallbackImage}
-        alt="Image not found"
-        sizes="(max-width: 400px) 92px, 154px"
         {...props}
       />
     )
