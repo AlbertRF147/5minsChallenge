@@ -1,18 +1,10 @@
 import React from 'react'
 import { Card, CardBody, Heading, Image, Stack, Text, useBreakpointValue } from '@chakra-ui/react'
+import useMovieImage from '../hooks/useMovieImage'
 
 const CardImage = ({ images, posterPath, title }) => {
-  const fallbackImage = useBreakpointValue({
-    base: 'https://via.placeholder.com/92x136?text=Not+found',
-    md: 'https://via.placeholder.com/154x231?text=Not+found'
-  })
-
-  const image = useBreakpointValue({
-    base: `${images?.base_url}${images?.poster_sizes[0]}${posterPath}`,
-    md: `${images?.base_url}${images?.poster_sizes[1]}${posterPath}`
-  })
-
-  return <Image objectFit="cover" src={image} alt={title} fallbackSrc={fallbackImage} />
+  const { cardImage } = useMovieImage({ images, posterPath })
+  return cardImage && <Image objectFit="cover" src={cardImage} alt={title} />
 }
 
 function MovieCard(props) {
@@ -31,6 +23,7 @@ function MovieCard(props) {
       m={{ base: '10px 0' }}
       onClick={handleOnCardClick}>
       <CardImage images={config.images} posterPath={posterPath} title={title} />
+
       <Stack>
         <CardBody p={{ base: '12px', md: '24px' }} textAlign="left">
           <Heading size={{ base: 'xs', md: 'md' }} noOfLines={1}>

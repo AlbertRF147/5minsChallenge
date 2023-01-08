@@ -7,6 +7,10 @@ import MovieCard from './components/MovieCard'
 import MovieCardSkeletons from './components/MovieCardSkeletons'
 import { MdClear } from 'react-icons/md'
 import DetailsWindow from './components/DetailsWindow'
+import Pager from './components/Pager'
+import NavBar from './components/NavBar'
+
+const TOTAL_NUM_PAGES = 10 // TODO: get the max limit from api
 
 function App() {
   const [inputSearch, setInputSearch] = useState('')
@@ -14,20 +18,26 @@ function App() {
   const [detailsWindowIsOpen, setDetailsWindowIsOpen] = useState(false)
   const [movieDetails, setMovieDetails] = useState(null)
   const [movies, setMovies] = useState(null)
+  const [page, setPage] = useState(1)
 
-  const moviesQuery = useQuery('movies', getPopularMovies, {
+  const moviesQuery = useQuery(['movies', page], () => getPopularMovies(page), {
     onSuccess: (movies) => {
       setMovies(movies)
     },
-    enabled: !search
+    enabled: !search,
+    keepPreviousData: true
   })
 
-  const searchedMoviesQuery = useQuery(['searchedMovies', search], () => getMoviesByTerm(search), {
-    onSuccess: (movies) => {
-      setMovies(movies)
-    },
-    enabled: Boolean(search)
-  })
+  const searchedMoviesQuery = useQuery(
+    ['searchedMovies', search, page],
+    () => getMoviesByTerm(search, page),
+    {
+      onSuccess: (movies) => {
+        setMovies(movies)
+      },
+      enabled: Boolean(search)
+    }
+  )
 
   const configQuery = useQuery('configuration', getConfiguration)
 
@@ -65,7 +75,8 @@ function App() {
 
   return (
     <div className="App">
-      <Container maxW="800px" minH="100vh">
+      <NavBar />
+      <Container as="main" maxW="800px" minH="100vh" p={{ base: '1rem', md: '2rem 1rem' }}>
         <InputGroup>
           <Input
             placeholder="Search movie titles"
@@ -73,7 +84,7 @@ function App() {
             onKeyUp={handleOnInputEnter}
             value={inputSearch}
           />
-          <InputRightElement children={<MdClear onClick={handleOnClear} />} />
+          <InputRightElement as="button" children={<MdClear onClick={handleOnClear} />} />
         </InputGroup>
 
         {/* Movie card skeletons */}
@@ -96,6 +107,8 @@ function App() {
               handleOnCardClick={() => handleOnCardClick(movie)}
             />
           ))}
+
+        <Pager numOfPages={TOTAL_NUM_PAGES} setPage={setPage} page={page} />
       </Container>
 
       {/* Movie card details modal */}

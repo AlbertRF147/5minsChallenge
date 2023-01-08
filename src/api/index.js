@@ -11,12 +11,12 @@ const getData = async (url) => {
   }
 }
 
-const getMoviesByTerm = async (term) => {
-  const url = `${API_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${term}&page=1&include_adult=false`
+const getMoviesByTerm = async (term, page) => {
+  const url = `${API_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${term}&page=${page}&include_adult=false`
   return await getData(url).then((data) => data.results)
 }
-const getPopularMovies = async () => {
-  const url = `${API_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+const getPopularMovies = async (page) => {
+  const url = `${API_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`
   return await getData(url).then((data) => data.results)
 }
 const getConfiguration = async () => {

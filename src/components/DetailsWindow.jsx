@@ -10,30 +10,16 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import { MdClose } from 'react-icons/md'
+import useMovieImage from '../hooks/useMovieImage'
 import './DetailsWindow.css'
 
 function DetailsWindow({ isOpen, handleOnClose, movie, config = {} }) {
-  const DetailsImage = (props) => {
-    const { images, posterPath, title } = props
-    const fallbackImage = useBreakpointValue({
-      base: 'https://via.placeholder.com/185?text=Not+found',
-      md: 'https://via.placeholder.com/282x423?text=Not+found'
+  const DetailsImage = ({ images, posterPath }) => {
+    const { detailsImage } = useMovieImage({
+      images,
+      posterPath
     })
-
-    const posterImage = useBreakpointValue({
-      base: `${images?.base_url}${images?.poster_sizes[2]}${posterPath}`,
-      md: `${images?.base_url}${images?.poster_sizes[3]}${posterPath}`
-    })
-
-    return (
-      <Image
-        objectFit="cover"
-        src={posterImage}
-        alt={title}
-        fallbackSrc={fallbackImage}
-        {...props}
-      />
-    )
+    return <Image objectFit="cover" src={detailsImage} alt={movie.title} />
   }
 
   return (
